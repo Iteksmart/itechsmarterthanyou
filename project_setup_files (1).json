@@ -1,0 +1,182 @@
+.eslintrc.json
+```json
+{
+  "extends": ["next/core-web-vitals", "eslint:recommended"],
+  "plugins": ["react", "react-hooks"],
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-unused-vars": "warn"
+  }
+}
+```
+
+.prettierrc
+```json
+{
+  "semi": true,
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "trailingComma": "es5"
+}
+```
+
+jest.config.js
+```js
+const nextJest = require('next/jest');
+
+const createJestConfig = nextJest({
+  dir: './',
+});
+
+const customJestConfig = {
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  testEnvironment: 'jsdom',
+  moduleDirectories: ['node_modules', '<rootDir>/'],
+};
+
+module.exports = createJestConfig(customJestConfig);
+```
+
+jest.setup.js
+```js
+import '@testing-library/jest-dom/extend-expect';
+```
+
+__tests__/example.test.js
+```js
+import { render, screen } from '@testing-library/react';
+import Home from '../src/app/page';
+
+test('renders homepage without crashing', () => {
+  render(<Home />);
+  expect(screen.getByText(/welcome/i)).toBeInTheDocument();
+});
+```
+
+.env.example
+```
+# Auth
+NEXTAUTH_SECRET=your_secret_here
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+# External Services
+JIRA_EMAIL=you@example.com
+JIRA_API_TOKEN=your_jira_token
+CW_BASE_URL=https://example.connectwise.com
+NEXT_PUBLIC_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/xxx/yyy/zzz
+
+# Database
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=password
+DB_NAME=mydb
+
+# Email
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your_email_user
+SMTP_PASS=your_email_password
+
+# Others
+STRIPE_SECRET_KEY=your_stripe_secret
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+```
+
+.github/workflows/ci.yml
+```yaml
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+```
+
+README.md (Expanded Template)
+```md
+# Project Name
+
+This is a Next.js + Tailwind CSS project.
+
+## Getting Started
+
+### Prerequisites
+- Node.js v18+
+- npm v9+
+
+### Installation
+```bash
+npm install
+```
+
+### Development
+```bash
+npm run dev
+```
+
+### Build for Production
+```bash
+npm run build
+```
+
+### Lint and Format
+```bash
+npm run lint
+npm run format
+```
+
+### Test
+```bash
+npm test
+```
+
+## Environment Variables
+Copy `.env.example` to `.env.local` and fill in values.
+
+## Project Structure
+```
+├── src/
+│   ├── app/              # Next.js app pages
+│   ├── components/       # Reusable UI components
+│   ├── pages/api/        # API routes
+│   └── utilities/        # Helper modules
+├── public/               # Static assets
+├── .github/workflows/    # GitHub Actions CI
+├── jest.config.js        # Jest config
+├── .eslintrc.json        # ESLint config
+├── .prettierrc           # Prettier config
+└── README.md
+```
+
+## License
+MIT
+```
